@@ -1,7 +1,9 @@
+import { Flex } from "@mantine/core";
+import Poem from "./poem";
 
 
-function App() {
-  return <></>
+export default function App() {
+  return <Flex align='center' justify='center'>
+    <Poem />
+  </Flex>
 }
-
-export default App
