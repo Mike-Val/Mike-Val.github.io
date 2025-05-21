@@ -1,0 +1,194 @@
+/* dryext/modern.css */
+
+/* Deeper background */
+body {
+    background-color: #1a1a1a;
+}
+
+/* Enhance input and button appearance */
+.form-control,
+.btn {
+    transition: all 0.3s ease-in-out;
+    /* Ensure buttons have a background so the glow is a border, not filling */
+    background-color: var(--bs-primary); /* Use Bootstrap variables for consistency */
+    border: 1px solid var(--bs-primary); /* Ensure border is visible */
+}
+
+/* Input focus effect */
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    background-color: #2b2b2b; /* Slightly lighter on focus */
+    color: #ffffff;
+}
+
+/* Button hover effects (keeping subtle lift but changing glow) */
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+    transform: translateY(-1px); /* Subtle lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Keep a subtle shadow */
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    border-color: #32383e;
+    transform: translateY(-1px); /* Subtle lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Keep a subtle shadow */
+}
+
+/* Style the message paragraph */
+#message {
+    font-style: italic;
+    color: #cccccc;
+}
+
+/* New glowing animation */
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+/* Apply glow effect container to active buttons (or all for development) */
+.btn:not(:disabled) {
+    position: relative;
+    z-index: 1; /* Ensure button is above the pseudo-elements */
+    border-radius: var(--bs-btn-border-radius, 0.375rem);
+    /* Remove default button background and border so the ::after element can provide it */
+    background: none;
+    border: none;
+}
+
+/* Pseudo-element for the glowing border */
+.btn:not(:disabled)::before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -5px;
+    left:-5px;
+    background-size: 400%;
+    z-index: -1; /* Position behind the button */
+    filter: blur(5px);
+    width: calc(100% + 10px); /* Adjusted size */
+    height: calc(100% + 10px); /* Adjusted size */
+    animation: glowing 20s linear infinite;
+    opacity: 0; /* Initially hidden */
+    transition: opacity .3s ease-in-out;
+    border-radius: var(--bs-btn-border-radius, 0.375rem);
+}
+
+/* Pseudo-element for the button's solid background */
+.btn:not(:disabled)::after {
+    z-index: -1; /* Position behind the button content, above ::before */
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #111; /* Button background color */
+    left: 0;
+    top: 0;
+    border-radius: var(--bs-btn-border-radius, 0.375rem);
+}
+
+/* Show glow on hover */
+.btn:not(:disabled):hover::before {
+    opacity: 1;
+}
+
+/* Ensure button text and background are visible above the pseudo-element */
+.btn:not(:disabled) > * {
+    position: relative;
+    z-index: 2;
+    /* Explicitly set text color for active state */
+    color: #ffffff; /* Ensure white text on click */
+}
+
+/* Ensure the primary button's actual background is visible */
+.btn-primary:not(:disabled) {
+    background-color: var(--bs-btn-bg);
+    border-color: var(--bs-btn-border-color);
+}
+
+/* Ensure the secondary button's actual background is visible */
+.btn-secondary:not(:disabled) {
+    background-color: var(--bs-btn-bg);
+    border-color: var(--bs-btn-border-color);
+}
+
+/* CSS for layout and drawer effect */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent overall page scrolling */
+    display: flex; /* Use flexbox for main layout */
+    flex-direction: column; /* Stack header and app-content vertically */
+    justify-content: flex-start; /* Align items from the start */
+    align-items: center; /* Center horizontally */
+}
+
+.header-controls {
+    width: 100%; /* Take full width */
+    z-index: 10; /* Ensure header is above other content */
+    background-color: #1a1a1a; /* Match body background */
+    padding: 15px; /* Add padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Removed absolute positioning */
+    margin-top: 30vh; /* Add top margin for spacing */
+}
+
+.container-fluid {
+    /* Allow container-fluid to take remaining height */
+    flex-grow: 1;
+    width: 100%; /* Take full width */
+     /* Ensure no padding from container-fluid affects the drawer */
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.app-content {
+    position: relative; /* Needed for absolute positioning of children */
+    overflow: hidden; /* Hide overflowing sections during transition */
+    height: 100%; /* Take full height of its container (container-fluid) */
+    display: flex; /* Use flexbox to manage control-sections-container height */
+    flex-direction: column; /* Stack children vertically */
+    padding: 0 15px; /* Add horizontal padding to content within app-content */
+    /* Removed padding-top */
+}
+
+.control-sections-container {
+    display: flex; /* Arrange children in a row */
+    width: 200%; /* Make it wide enough for both sections */
+    height: 100%; /* Take full height of app-content */
+    transition: transform 0.5s ease-in-out; /* Animate the sliding */
+}
+
+.control-section {
+    width: 50%; /* Each section takes half the container width */
+    flex-shrink: 0; /* Prevent shrinking */
+    overflow-y: auto; /* Add scrolling to sections if content overflows */
+    /* Removed padding */
+}
+
+/* State when showing decoding page */
+.control-sections-container.show-decoding {
+    transform: translateX(-50%); /* Slide left to show decoding */
+}
+
+/* State when showing encoding page (default) */
+.control-sections-container.show-encoding {
+    transform: translateX(0%); /* Show encoding */
+}
+
+/* CSS for page transitions */
+.page-section {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.page-hidden {
+    opacity: 0;
+    display: none !important; /* Use !important to override Bootstrap utilities */
+} 
