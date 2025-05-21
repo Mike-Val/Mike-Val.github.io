@@ -140,19 +140,23 @@ body, html {
     margin-top: 30vh; /* Add top margin for spacing */
 }
 
-.container-fluid {
-    /* Allow container-fluid to take remaining height */
+.container {
+    /* Allow container to take remaining height */
     flex-grow: 1;
-    width: 100%; /* Take full width */
-     /* Ensure no padding from container-fluid affects the drawer */
+    width: 100%; /* Allow container to take full width on small screens */
+    max-width: 960px; /* Example max-width for desktop */
+    /* Ensure no padding from container affects the drawer */
     padding-right: 0;
     padding-left: 0;
+     /* Center the container itself */
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .app-content {
     position: relative; /* Needed for absolute positioning of children */
     overflow: hidden; /* Hide overflowing sections during transition */
-    height: 100%; /* Take full height of its container (container-fluid) */
+    height: 100%; /* Take full height of its container (container) */
     display: flex; /* Use flexbox to manage control-sections-container height */
     flex-direction: column; /* Stack children vertically */
     padding: 0 15px; /* Add horizontal padding to content within app-content */
